@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Frelancia | منبه مستقل</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <div class="minimal-container">
+    <div class="header">
+      <div class="logo-area">
+        <h1>Frelancia Pro</h1>
+        <p class="tagline">مساعدك الذكي على مستقل</p>
+      </div>
+    </div>
+
+    <div class="content-body">
+      <div class="stats-overview">
+        <div class="stat-box">
+          <span class="stat-num" id="todayCount">0</span>
+          <span class="stat-label">مشاريع اليوم</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-box">
+          <span class="stat-num" id="totalSeen">0</span>
+          <span class="stat-label">إجمالي الرصد</span>
+        </div>
+      </div>
+
+      <div class="status-indicator">
+        <span class="dot active"></span>
+        <span id="lastCheck">جاري التحميل...</span>
+      </div>
+
+      <div class="main-actions">
+        <button id="open-dashboard-btn" class="btn primary">
+          <i class="fas fa-desktop"></i>
+          <span>فتح لوحة التحكم</span>
+        </button>
+        <button id="checkNowBtn" class="btn secondary">
+          <i class="fas fa-sync-alt"></i>
+          <span>فحص الآن</span>
+        </button>
+        <button id="toggleNotificationsBtn" class="btn secondary">
+          <i class="fas fa-bell"></i>
+          <span>الإشعارات: مفعلة</span>
+        </button>
+        
+        <button id="checkConnectionBtn" class="btn connection">
+          <i class="fas fa-plug"></i>
+          <span>فحص الاتصال بمستقل (Diagnostics)</span>
+        </button>
+      </div>
+
+      <div id="connectionReport" class="connection-report hidden"></div>
+    </div>
+
+    <div class="footer">
+      <a href="https://mostaql.com/projects" target="_blank">زيارة موقع مستقل الرسمي</a>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

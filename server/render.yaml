@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: frelancia-hub
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: SCRAPE_INTERVAL_MS
+        value: 15000

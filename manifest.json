@@ -1,0 +1,78 @@
+{
+  "manifest_version": 3,
+  "name": "Mostaql Job Notifier + AI Proposal",
+  "version": "1.2.0",
+  "description": "تنبيهات فورية للمشاريع الجديدة على مستقل مع إنشاء عروض بالذكاء الاصطناعي",
+  "permissions": [
+    "notifications",
+    "alarms",
+    "storage",
+    "offscreen",
+    "downloads",
+    "tabs"
+  ],
+  "host_permissions": [
+    "https://mostaql.com/*",
+    "https://chatgpt.com/*",
+    "https://chat.openai.com/*",
+    "https://frelancia.runasp.net/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://mostaql.com/*"
+      ],
+      "js": [
+        "content/utils.js",
+        "content/data.js",
+        "content/prompts.js",
+        "content/autofill.js",
+        "content/project-sidebar.js",
+        "content/export.js",
+        "content/home.js",
+        "content/profile.js",
+        "content/clipboard.js",
+        "content/init.js"
+      ],
+      "css": [
+        "content.css"
+      ]
+    },
+    {
+      "matches": [
+        "https://chatgpt.com/*",
+        "https://chat.openai.com/*"
+      ],
+      "js": [
+        "chatgpt.js"
+      ],
+      "run_at": "document_start"
+    }
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "content/clipboard-main.js"
+      ],
+      "matches": [
+        "https://mostaql.com/*"
+      ]
+    }
+  ]
+}

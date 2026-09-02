@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frelancia Pro | لوحة التحكم</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="dashboard-bids.css">
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-section">
+                <img src="icons/icon128.png" alt="Logo" class="logo-img">
+                <div class="logo-text">
+                    <h1>Frelancia</h1>
+                    <span>مساعد مستقل الذكي</span>
+                </div>
+            </div>
+
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="overview">
+                    <i class="fas fa-home"></i>
+                    <span>النظرة العامة</span>
+                </button>
+                <button class="nav-item" data-tab="bids-tracker">
+                    <i class="fas fa-chart-line"></i>
+                    <span>متابعة العروض</span>
+                </button>
+                <button class="nav-item" data-tab="filters">
+                    <i class="fas fa-filter"></i>
+                    <span>الفلاتر الذكية</span>
+                </button>
+                <button class="nav-item" data-tab="prompts">
+                    <i class="fas fa-terminal"></i>
+                    <span>أوامر AI</span>
+                </button>
+                <button class="nav-item" data-tab="proposals">
+                    <i class="fas fa-file-contract"></i>
+                    <span>نماذج العروض</span>
+                </button>
+                <button class="nav-item" data-tab="settings">
+                    <i class="fas fa-cog"></i>
+                    <span>الإعدادات المتقدمة</span>
+                </button>
+                <button class="nav-item" data-tab="contributors">
+                    <i class="fas fa-users"></i>
+                    <span>المساهمون</span>
+                </button>
+                <button class="nav-item" data-tab="about">
+                    <i class="fas fa-info-circle"></i>
+                    <span>من نحن</span>
+                </button>
+            </nav>
+
+            <div style="margin-top: auto; padding-top: 20px;">
+                <div class="toggle-row" style="background: rgba(255,255,255,0.4);">
+                    <span style="font-size: 13px;">حالة المراقبة</span>
+                    <label class="switch">
+                        <input type="checkbox" id="systemToggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            
+            <!-- Overview Tab -->
+            <div class="tab-container" id="overview-tab">
+                <div class="content-header">
+                    <div class="header-title">
+                        <h2>مرحباً بك، شريك النجاح</h2>
+                        <p>إليك ملخص لنشاط الإضافة وآخر المشاريع المرصودة.</p>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-briefcase"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="value" id="stat-today">0</span>
+                            <span class="label">مشاريع اليوم</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="value" id="stat-total">0</span>
+                            <span class="label">إجمالي المرصود</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="value" id="stat-last-time">-</span>
+                            <span class="label">آخر فحص</span>
+                        </div>
+                    </div>
+                    <div class="stat-card" id="connection-status-card">
+                        <div class="stat-icon green" id="connection-status-icon">
+                            <i class="fas fa-wifi"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="value" id="stat-connection" style="font-size: 14px;">جارٍ الاتصال...</span>
+                            <span class="label">حالة الاتصال</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="section-header">
+                        <i class="fas fa-eye"></i>
+                        <h3>المشاريع المراقبة <span style="font-size:12px; font-weight:600; color:var(--text-muted); margin-right:8px;">آخر 7 مشاريع</span></h3>
+                    </div>
+                    <div id="recentProjectsList" class="recent-list">
+                        <!-- Projects will be loaded here -->
+                        <p class="help-text" style="text-align: center; padding: 40px;">سيتم عرض آخر المشاريع المرصودة هنا بمجرد توفرها.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bids Tracker Tab -->
+            <div class="tab-container hidden" id="bids-tracker-tab">
+                <div class="content-header">
+                    <div class="header-title">
+                        <h2>متابعة العروض <span class="bids-tracker-period">آخر 30 يوم</span></h2>
+                        <p>تتبع عروضك المقدمة خلال آخر 30 يومًا واعرف متى يتاح لك تقديم عرض جديد.</p>
+                    </div>
+                    <button id="refreshBidsBtn" class="btn-secondary">
+                        <i class="fas fa-sync-alt"></i> تحديث
+                    </button>
+                </div>
+
+                <!-- Summary Stats -->
+                <div class="stats-grid" id="bids-summary-stats">
+                    <div class="stat-card">
+                        <div class="stat-icon blue">
+                            <i class="fas fa-file-signature"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="value" id="bids-total-30d">-</span>
+                            <span class="label">عروض آخر 30 يوم</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <i class="fas fa-check-double"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="value" id="bids-available-slots">-</span>
+                            <span class="label">عروض متاحة الآن</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <i class="fas fa-hourglass-half"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="value" id="bids-next-available" style="font-size: 16px;">-</span>
+                            <span class="label">أقرب عرض سيتاح</span>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon purple">
+                            <i class="fas fa-calendar-day"></i>
+                        </div>
+                        <div class="stat-info">
+                            <span class="value" id="bids-today-count">-</span>
+                            <span class="label">عروض اليوم</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Status Breakdown -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <i class="fas fa-chart-pie"></i>
+                        <h3>توزيع الحالات <span class="bids-tracker-sub">آخر 30 يوم</span></h3>
+                    </div>
+                    <div id="bidsStatusGrid" class="bid-status-grid">
+                        <!-- Status cards rendered dynamically -->
+                    </div>
+                </div>
+
+                <!-- Bids Timeline -->
+                <div class="settings-section">
+                    <div class="section-header">
+                        <i class="fas fa-stream"></i>
+                        <h3>جدول العروض <span class="bids-tracker-sub">العد التنازلي حتى انتهاء فترة الـ 30 يوم</span></h3>
+                    </div>
+                    <div id="bidsTimelineList" class="bids-timeline">
+                        <div class="bids-loading">
+                            <i class="fas fa-spinner fa-spin"></i>
+                            <p>جاري تحميل بيانات العروض...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters Tab -->
+            <div class="tab-container hidden" id="filters-tab">
+                <div class="content-header">
+                    <div class="header-title">
+                        <h2>الفلاتر الذكية</h2>
+                        <p>خصص نوعية المشاريع التي تريد الحصول على تنبيهات لها.</p>
+                    </div>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <i class="fas fa-search"></i>
+                            <h3>الكلمات المفتاحية</h3>
+                        </div>
+                        <div class="form-group">
+                            <label>كلمات يجب توفرها (تضمين)</label>
+                            <input type="text" id="keywordsInclude" class="form-control" placeholder="React, Node, تصميم...">
+                            <p class="help-text">افصل بين الكلمات بفاصلة. سيتم إخطارك فقط إذا احتوى المشروع على أحدها.</p>
+                        </div>
+                        <div class="form-group">
+                            <label>كلمات مستبعدة</label>
+                            <input type="text" id="keywordsExclude" class="form-control" placeholder="Wordpress, PHP...">
+                            <p class="help-text">سيتم تجاهل أي مشروع يحتوي على هذه الكلمات تماماً.</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <i class="fas fa-dollar-sign"></i>
+                            <h3>معايير المشروع</h3>
+                        </div>
+                        <div class="form-group">
+                            <label>أدنى ميزانية ($)</label>
+                            <input type="number" id="minBudget" class="form-control" placeholder="مثلاً: 50">
+                        </div>
+                        <div class="form-group">
+                            <label>أدنى نسبة توظيف للعميل (%)</label>
+                            <input type="number" id="minHiringRate" class="form-control" placeholder="مثلاً: 70">
+                        </div>
+                        <div class="form-group">
+                            <label>أقصى مدة تنفيذ (يوم)</label>
+                            <input type="number" id="maxDuration" class="form-control" placeholder="مثلاً: 14">
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <i class="fas fa-tags"></i>
+                            <h3>تصنيفات البحث</h3>
+                        </div>
+                        <div class="toggle-row">
+                            <span>أعمال وبرمجة (Development)</span>
+                            <label class="switch">
+                                <input type="checkbox" id="cat-development">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-row">
+                            <span>ذكاء اصطناعي (AI)</span>
+                            <label class="switch">
+                                <input type="checkbox" id="cat-ai">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="toggle-row">
+                            <span>كافة المشاريع</span>
+                            <label class="switch">
+                                <input type="checkbox" id="cat-all">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <p class="help-text">حدد الأقسام التي تود متابعتها في موقع مستقل.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI Prompts Tab -->
+            <div class="tab-container hidden" id="prompts-tab">
+                <div class="content-header">
+                    <div class="header-title">
+                        <h2>أوامر الذكاء الاصطناعي</h2>
+                        <p>قم بإدارة الأوامر (Prompts) التي تستخدمها لتوليد العروض.</p>
+                    </div>
+                    <button id="addPromptBtn" class="btn-primary">
+                        <i class="fas fa-plus"></i> إضافة أمر جديد
+                    </button>
+                </div>
+
+                <div id="promptsList" class="settings-grid">
+                    <!-- Prompts will be loaded here -->
+                </div>
+            </div>
+
+            <!-- Proposals Tab -->
+            <div class="tab-container hidden" id="proposals-tab">
+                <div class="content-header">
+                    <div class="header-title">
+                        <h2>نماذج العروض</h2>
+                        <p>حدد الرصيد الافتراضي الذي يتم تعبئته تلقائياً عند فتح المشروع.</p>
+                    </div>
+                </div>
+
+                <div class="settings-section">
+                    <div class="form-group">
+                        <label>نص العرض الافتراضي</label>
+                        <textarea id="proposalTemplate" rows="15" class="form-control" placeholder="اكتب عرضك هنا..."></textarea>
+                        <p class="help-text">سيتم وضع هذا النص تلقائياً في خانة تفاصيل العرض في موقع مستقل.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Advanced Settings Tab -->
+            <div class="tab-container hidden" id="settings-tab">
+                <div class="content-header">
+                    <div class="header-title">
+                        <h2>الإعدادات المتقدمة</h2>
+                        <p>إعدادات النظام والتحكم المتقدم.</p>
+                    </div>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <i class="fas fa-robot"></i>
+                            <h3>رابط الذكاء الاصطناعي</h3>
+                        </div>
+                        <div class="form-group">
+                            <label>رابط الشات المفضل</label>
+                            <input type="text" id="aiChatUrl" class="form-control" placeholder="https://chatgpt.com/" dir="ltr">
+                            <p class="help-text">يمكنك استخدام رابط مخصص أو رابط مشروع ChatGPT بعينه.</p>
+                        </div>
+                        <div class="form-group">
+                            <label>تكرار الفحص (بالدقائق)</label>
+                            <input type="number" id="checkInterval" class="form-control" placeholder="مثلاً: 1" min="1">
+                            <p class="help-text">عدد الدقائق بين كل عملية فحص للمشاريع الجديدة.</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <i class="fas fa-satellite-dish"></i>
+                            <h3>وضع الإشعارات</h3>
+                        </div>
+                        <div class="form-group">
+                            <label>طريقة استقبال المشاريع الجديدة</label>
+                            <select id="notificationMode" class="form-control">
+                                <option value="auto">تلقائي (SignalR مع احتياطي)</option>
+                                <option value="signalr">اتصال مباشر فقط (SignalR)</option>
+                                <option value="polling">استعلام دوري فقط (Polling)</option>
+                            </select>
+                            <p class="help-text">
+                                <strong>تلقائي:</strong> يبدأ بالاتصال المباشر، ويتحول للاستعلام تلقائياً عند انقطاع السيرفر.<br>
+                                <strong>اتصال مباشر:</strong> إشعارات فورية عبر السيرفر (بدون طلبات HTTP).<br>
+                                <strong>استعلام دوري:</strong> يفحص الموقع كل فترة زمنية محددة.
+                            </p>
+                        </div>
+                        <div class="form-group">
+                            <label>رابط سيرفر SignalR المخصص</label>
+                            <input type="text" id="signalrServerUrl" class="form-control" placeholder="https://frelancia.runasp.net/jobNotificationHub" dir="ltr">
+                            <p class="help-text">اتركه فارغاً لاستخدام السيرفر الافتراضي. يُطبَّق عند الحفظ ويُعاد الاتصال تلقائياً.</p>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <i class="fas fa-bell"></i>
+                            <h3>ساعات الهدوء</h3>
+                        </div>
+                        <div class="toggle-row">
+                            <span>تفعيل ساعات الهدوء</span>
+                            <label class="switch">
+                                <input type="checkbox" id="quietHoursEnabled">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="form-group" style="display: flex; gap: 20px;">
+                            <div style="flex: 1;">
+                                <label>من</label>
+                                <input type="time" id="quietHoursStart" class="form-control">
+                            </div>
+                            <div style="flex: 1;">
+                                <label>إلى</label>
+                                <input type="time" id="quietHoursEnd" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <i class="fas fa-vial"></i>
+                            <h3>أدوات الفحص</h3>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button id="testNotificationBtn" class="btn-secondary" style="flex: 1; justify-content: center;">
+                                <i class="fas fa-bell"></i> فحص الإشعار
+                            </button>
+                            <button id="testSoundBtn" class="btn-secondary" style="flex: 1; justify-content: center;">
+                                <i class="fas fa-volume-up"></i> فحص الصوت
+                            </button>
+                        </div>
+                        <p class="help-text">استخدم هذه الأزرار للتأكد من وصول التنبيهات وصوت الإشعار بشكل سليم.</p>
+                    </div>
+
+                    <div class="settings-section">
+                        <div class="section-header">
+                            <i class="fas fa-file-export"></i>
+                            <h3>النسخ الاحتياطي</h3>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button id="exportBackupBtn" class="btn-primary" style="flex: 1; justify-content: center;">
+                                <i class="fas fa-download"></i> تصدير البيانات
+                            </button>
+                            <button id="importBackupBtn" class="btn-secondary" style="flex: 1; justify-content: center;">
+                                <i class="fas fa-upload"></i> استيراد البيانات
+                            </button>
+                            <input type="file" id="importBackupInput" accept=".json" style="display: none;">
+                        </div>
+                        <p class="help-text">احفظ نسخة من إعداداتك ومقترحاتك لاستعادتها لاحقاً.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Contributors Tab -->
+            <div class="tab-container hidden" id="contributors-tab">
+                <div class="content-header">
+                    <div class="header-title">
+                        <h2>شركاء النجاح (المساهمون)</h2>
+                        <p>شكر خاص لكل من ساهم في تطوير وتحسين هذه الإضافة.</p>
+                    </div>
+                </div>
+
+                <div id="contributors-list" class="about-grid">
+                    <!-- Contributors will be loaded here via JavaScript -->
+                    <div class="loading-spinner" style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                        <i class="fas fa-spinner fa-spin" style="font-size: 32px; color: var(--primary);"></i>
+                        <p style="margin-top: 10px;">جاري تحميل قائمة المبدعين...</p>
+                    </div>
+                </div>
+            </div>
+            <!-- About Us Tab -->
+            <div class="tab-container hidden" id="about-tab">
+                <div class="content-header">
+                    <div class="header-title">
+                        <h2>من نحن</h2>
+                        <p>تعرف على الفريق المطور لمشروع Frelancia.</p>
+                    </div>
+                </div>
+
+                <div class="about-grid">
+                    <!-- Elaraby Profile -->
+                    <div class="about-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar elaraby">
+                                <i class="fas fa-code"></i>
+                            </div>
+                            <div class="profile-info">
+                                <h3>Mohammed Ramadan Elaraby</h3>
+                            </div>
+                        </div>
+                        <div class="profile-social">
+                            <a href="https://www.linkedin.com/in/mohammed-ramadan-elaraby-097245242/" target="_blank" class="social-btn linkedin">
+                                <i class="fab fa-linkedin"></i>
+                                LinkedIn
+                            </a>
+                            <a href="https://github.com/Elaraby218" target="_blank" class="social-btn github">
+                                <i class="fab fa-github"></i>
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- TryOmar Profile -->
+                    <div class="about-card">
+                        <div class="profile-header">
+                            <div class="profile-avatar omar">
+                                <i class="fas fa-rocket"></i>
+                            </div>
+                            <div class="profile-info">
+                                <h3>TryOmar</h3>
+                            </div>
+                        </div>
+                        <div class="profile-social">
+                            <a href="https://www.linkedin.com/in/tryomar/" target="_blank" class="social-btn linkedin">
+                                <i class="fab fa-linkedin"></i>
+                                LinkedIn
+                            </a>
+                            <a href="https://github.com/TryOmar" target="_blank" class="social-btn github">
+                                <i class="fab fa-github"></i>
+                                GitHub
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mission Brief -->
+                <div class="mission-section">
+                    <div class="mission-content">
+                        <i class="fas fa-heart mission-icon"></i>
+                        <h3>هدفنا ورؤيتنا</h3>
+                        <p>لقد قمنا بتطوير هذه الإضافة بهدف واحد أساسي: تمكين المستقلين العرب من الوصول إلى الفرص والمشاريع على موقع مستقل بأسرع وقت ممكن. نحن نؤمن أن السرعة والدقة في التقديم هما مفتاح النجاح في عالم العمل الحر، ولذلك سخرنا تقنيات الذكاء الاصطناعي والمراقبة اللحظية لتكون رفيقك الدائم في رحلة نجاحك.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dashboard Footer -->
+            <footer class="dashboard-footer">
+                <div class="footer-content">
+                    <span class="footer-text">جميع الحقوق محفوظة لـ</span>
+                    <div class="footer-links">
+                        <a href="https://github.com/Elaraby218" target="_blank" class="footer-link">Elaraby</a>
+                        <span class="footer-sep">و</span>
+                        <a href="https://github.com/TryOmar" target="_blank" class="footer-link">TryOmar</a>
+                    </div>
+                    <span class="footer-copy">&copy; 2026</span>
+                </div>
+                <div class="footer-version">v2.0.0 Premium</div>
+            </footer>
+
+            <!-- Sticky Save Bar -->
+            <div class="sticky-footer">
+                <span id="saveStatus" style="font-size: 14px; font-weight: 700; color: var(--success); opacity: 0; transition: opacity 0.3s;">تم حفظ التغييرات بنجاح</span>
+                <button id="saveAllBtn" class="btn-primary">
+                    <i class="fas fa-save"></i> حفظ جميع الإعدادات
+                </button>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <div id="promptModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px);">
+        <div class="settings-section" style="width: 500px; margin-bottom: 0;">
+            <div class="section-header">
+                <h3 id="modalTitle">إضافة أمر جديد</h3>
+            </div>
+            <input type="hidden" id="promptId">
+            <div class="form-group">
+                <label>عنوان الأمر</label>
+                <input type="text" id="promptTitle" class="form-control" placeholder="مثال: عرض برمجة Flutter">
+            </div>
+            <div class="form-group">
+                <label>نص الأمر</label>
+                <textarea id="promptContent" rows="8" class="form-control" placeholder="اكتب الأمر هنا..."></textarea>
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 24px;">
+                <button id="closeModalBtn" class="nav-item" style="background: #f1f5f9; text-align: center; justify-content: center;">إلغاء</button>
+                <button id="confirmSavePrompt" class="btn-primary" style="flex: 1; justify-content: center;">حفظ الأمر</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- dashboard-bids modules (load order matters) -->
+    <script src="dashboard-bids/constants.js"></script>
+    <script src="dashboard-bids/api.js"></script>
+    <script src="dashboard-bids/data.js"></script>
+    <script src="dashboard-bids/homepage-stats.js"></script>
+    <script src="dashboard-bids/render.js"></script>
+    <script src="dashboard-bids/timers.js"></script>
+    <script src="dashboard-bids/ui-state.js"></script>
+    <script src="dashboard-bids/init.js"></script>
+    <!-- dashboard modules (load order matters) -->
+    <script src="dashboard/connection.js"></script>
+    <script src="dashboard/tabs.js"></script>
+    <script src="dashboard/projects.js"></script>
+    <script src="dashboard/prompts.js"></script>
+    <script src="dashboard/settings.js"></script>
+    <script src="dashboard/contributors.js"></script>
+    <script src="dashboard/events.js"></script>
+    <script src="dashboard/init.js"></script>
+</body>
+</html>
