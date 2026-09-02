@@ -3,7 +3,7 @@
 // Depends on: constants.js (SIGNALR_AVAILABLE), signalr-client.js (signalRClient global)
 // ==========================================
 
-const DEFAULT_SIGNALR_URL = 'http://frelancia-hub.runasp.net/jobNotificationHub';
+const DEFAULT_SIGNALR_URL = 'https://frelancia-hub.runasp.net/jobNotificationHub';
 
 async function initializeSignalR() {
   try {

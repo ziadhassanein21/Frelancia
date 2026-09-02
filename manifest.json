@@ -15,7 +15,9 @@
     "https://mostaql.com/*",
     "https://chatgpt.com/*",
     "https://chat.openai.com/*",
-    "https://frelancia.runasp.net/*"
+    "https://*.runasp.net/*",
+    "http://*.runasp.net/*",
+    "*://*/*"
   ],
   "content_scripts": [
     {

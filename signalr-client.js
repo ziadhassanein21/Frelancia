@@ -9,7 +9,7 @@
 class SignalRClient {
     constructor() {
         this.connection = null;
-        this.serverUrl = 'https://frelancia.runasp.net/jobNotificationHub';
+        this.serverUrl = 'https://frelancia-hub.runasp.net/jobNotificationHub';
         this.isConnected = false;
         this.reconnectAttempts = 0;
         this.maxReconnectAttempts = 10;
